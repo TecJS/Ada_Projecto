@@ -28,9 +28,9 @@ def cromosoma_mwr_lwr(n_maquinas,n_trabajos,n_max_operaciones,tiempos_ops,secuen
             # Recorrer TODOS los trabajos ordenados por prioridad
         trabajos_activos = [j for j in range(len(tiempo_restante_r)) if tiempo_restante_r[j] > 0]
         trabajos_activos.sort(key=lambda j: tiempo_restante_r[j], reverse=tipo)
-        print(trabajos_activos)
-        print(tiempo_actual)
-        print(tiempo_restante_r)
+        #print(trabajos_activos)
+        #print(tiempo_actual)
+        #print(tiempo_restante_r)
         #time.sleep(0)
         
         for job_id in trabajos_activos:
@@ -46,14 +46,14 @@ def cromosoma_mwr_lwr(n_maquinas,n_trabajos,n_max_operaciones,tiempos_ops,secuen
                     trabajo_reloj[act_seleccionada.trabajo_id-1]=maquinas_reloj[act_seleccionada.maquina-1]
                     pendientes_siguientes.remove(act_seleccionada)
                     cromosoma[act_seleccionada.maquina-1].append(act_seleccionada.trabajo_id)
-                    print(act_seleccionada)
-                    print("termina maquina en tiempo",maquinas_reloj[act_seleccionada.maquina-1])
-                    print("termina trabajo en tiempo",trabajo_reloj[act_seleccionada.trabajo_id-1])
+                    #print(act_seleccionada)
+                    #print("termina maquina en tiempo",maquinas_reloj[act_seleccionada.maquina-1])
+                    #print("termina trabajo en tiempo",trabajo_reloj[act_seleccionada.trabajo_id-1])
                     bandera=True #se hizo algo
                     
                     tiempo_restante_r[act_seleccionada.trabajo_id-1]-= act_seleccionada.tiempo_duracion
                     if  act_seleccionada.siguiente != None:
-                        print("Actividad Siguiente: ",act_seleccionada.siguiente)
+                        #print("Actividad Siguiente: ",act_seleccionada.siguiente)
                         pendientes_siguientes.append(act_seleccionada.siguiente)
         if bandera == False:
             tiempos_proximos = []

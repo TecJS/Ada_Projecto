@@ -41,9 +41,9 @@ def base_regla(grupos: np.ndarray, num_grupos: int, sf: np.ndarray,
     # Ordenar grupos por suma
     info_grupos_ordenado = sorted(info_grupos, key=lambda x: x[1], reverse=rever)
     
-    print(f'\n{"LPT" if rever else "SPT"} - Grupos ordenados por suma:')
-    for g, suma, indices in info_grupos_ordenado:
-        print(f'  Grupo {g}: suma={suma:.0f}, trabajos={list(indices)}')
+    #print(f'\n{"LPT" if rever else "SPT"} - Grupos ordenados por suma:')
+    #for g, suma, indices in info_grupos_ordenado:
+    #    print(f'  Grupo {g}: suma={suma:.0f}, trabajos={list(indices)}')
     
     return info_grupos_ordenado
 
