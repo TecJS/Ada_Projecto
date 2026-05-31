@@ -5,6 +5,9 @@ import time
 import Configuraciones as conf
 from typing import List, Tuple, Dict, Union
 import time
+import leer_csv
+import guarda_resultado 
+import grafica
 # ==============================================================================
 # ALGORITMO GENÉTICO PARA JSSP BASADO EN PSEUDOCÓDIGO DEL USUARIO
 # ==============================================================================
@@ -12,37 +15,20 @@ import time
 # 1. Asignar cantidad de trabajos y máquinas
 n_trabajos = 8
 n_maquinas = 14
-n_individuos = 20
+n_individuos = 100
 m_generaciones = 50
-k_torneo = 3
+k_torneo = 20
 k_clusters = 3
 n_max_operaciones=5
 
-# 3. Establecer secuencia de operaciones (Orden de máquinas para cada trabajo J1 a J8)
-secuencia_ops = np.array([
-    [1,  3,  0,  0, 0],  # J1
-    [7, 13,  5,  1, 3],  # J2
-    [7, 14,  5,  9, 0],  # J3
-    [6,  0,  0,  0, 0],  # J4
-    [10, 0,  0,  0, 0],  # J5
-    [1,  3,  0,  0, 0],  # J6
-    [6, 12, 11,  0, 0],  # J7
-    [11, 0,  0,  0, 0]   # J8
-])
-
-# 4. Establecer la matriz de tiempos (Trabajo x Máquina)
-tiempos_ops = np.array([
-    # M1, M2, M3, M4, M5, M6, M7, M8, M9, M10, M11, M12, M13, M14
-    [30,  0, 10,  0,  0,  0,  0,  0,  0,   0,   0,   0,   0,   0], # J1
-    [120, 0, 30,  0, 20,  0, 30,  0,  0,   0,   0,   0,  30,   0], # J2
-    [0,   0,  0,  0, 20,  0, 30,  0, 90,   0,   0,   0,   0,  30], # J3
-    [0,   0,  0,  0,  0, 10,  0,  0,  0,   0,   0,   0,   0,   0], # J4
-    [0,   0,  0,  0,  0,  0,  0,  0,  0,  20,   0,   0,   0,   0], # J5
-    [120, 0, 30,  0,  0,  0,  0,  0,  0,   0,   0,   0,   0,   0], # J6
-    [0,   0,  0,  0,  0, 20,  0,  0,  0,   0,  20,  20,   0,   0], # J7
-    [0,   0,  0,  0,  0,  0,  0,  0,  0,   0,  20,   0,   0,   0]  # J8
-])
-
+semillaAG=3812
+#=====================Leer excel
+tipo_caso="mediano"
+semilla=100 #semilla de instancia
+secuencia_ops, tiempos_ops, n_trabajos, n_maquinas = leer_csv.leer_instancia_jssp(tipo_caso, semilla).values()
+print(secuencia_ops)
+print(tiempos_ops)
+#====================================
 # Función Auxiliar: Cruza PMX (CORREGIDA PARA EVITAR BUCLE INFINITO)
 def cruza_pmx(padreA, padreB, celdas):
     cortes = sorted(random.sample(range(1, celdas - 1), 2))
@@ -108,19 +94,14 @@ def calcular_makespan(cromosoma, tiempos, secuencias):
     return np.max(tiempo_maq)
 
 
-
-
-# ============================================================================
-# 8. GENERACIÓN DE CROMOSOMAS
-# ============================================================================
-
 # ==============================================================================
 # INICIO DE EJECUCIÓN
 # ==============================================================================
 def ejecucion(config_poblacion):
+    random.seed(semillaAG)
     start_time = time.time()
     print("Creando población inicial...")
-
+    historial_makespan=[]
     # 5. Crear Población Inicial
     poblacion = config_poblacion
 
@@ -142,7 +123,9 @@ def ejecucion(config_poblacion):
         if makespans[idx_mejor] < mejor_historico_makespan:
             mejor_historico_makespan = makespans[idx_mejor]
             mejor_historico_cromosoma = np.copy(poblacion[idx_mejor])
-            
+
+        historial_makespan.append(mejor_historico_makespan)
+           
         # c. Elitismo
         if gen > 1:
             poblacion[idx_peor] = np.copy(mejor_historico_cromosoma)
@@ -221,14 +204,26 @@ def ejecucion(config_poblacion):
         poblacion = nueva_generacion
         
         if gen % 10 == 0:
-            print(f"Generación {gen} procesada...")
+            print(f"Generación {gen} procesada... Mejor maxpans{mejor_historico_makespan}")
+            
 
     end_time = time.time()
     print("\n" + "="*50)
     print(f"Ejecución Finalizada en {round(end_time - start_time, 2)} segundos.")
     print(f"Mejor Makespan encontrado: {mejor_historico_makespan} minutos.")
     print("="*50)
+    guarda_resultado.guardar_resultado_ag(tipo_caso,
+    semilla,
+    n_trabajos,
+    n_maquinas,
+    mejor_historico_makespan,
+    mejor_historico_cromosoma)
+    grafica.graficar_convergencia_ag(m_generaciones, historial_makespan, tipo_caso, semilla)
+    #historial_makespan=[]#limpia el hisotrial para la proxima ejecucion
     return
+#=============================Guardar resultado
+
+
 
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 print("Configuracion A")
