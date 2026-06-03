@@ -21,9 +21,9 @@ k_torneo = 20
 k_clusters = 3
 n_max_operaciones=5
 
-semillaAG=3812
+semillaAG=100
 #=====================Leer excel
-tipo_caso="mediano"
+tipo_caso="grande"
 semilla=100 #semilla de instancia
 secuencia_ops, tiempos_ops, n_trabajos, n_maquinas = leer_csv.leer_instancia_jssp(tipo_caso, semilla).values()
 print(secuencia_ops)

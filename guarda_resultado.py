@@ -1,5 +1,5 @@
 import pandas as pd
-
+import os
 
 def guardar_resultado_ag(
     tipo_caso,
@@ -41,6 +41,13 @@ def guardar_resultado_ag(
             ],
         }
     )
+
+
+    # Bucle para añadir un número si el archivo ya existe
+    contador = 1
+    while os.path.exists(archivo_salida):
+        archivo_salida = f"Resultados_AG_{tipo_caso}_{semilla}_{contador}.csv"
+        contador += 1
 
     # Guardar el primer DataFrame (crea el archivo o lo sobrescribe si ya existía)
     info.to_csv(archivo_salida, index=False)

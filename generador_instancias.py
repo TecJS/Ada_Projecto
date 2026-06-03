@@ -76,7 +76,7 @@ def generar_instancia_jssp(tipo_caso, semilla=100):
     # PARTE 3: Exportación a Archivos CSV
     # ---------------------------------------------------------
     # 1. Ruta de destino (Usa barras normales '/' o doble barra '\\' en Windows)
-    ruta_destino = "/"
+    ruta_destino = "arcvhio/"
 
     # Nota opcional: Crea la carpeta si no existe para evitar errores
     if not os.path.exists(ruta_destino):
