@@ -21,7 +21,7 @@ k_torneo = 20
 k_clusters = 3
 n_max_operaciones=5
 
-semillaAG=100
+semillaAG=3812
 #=====================Leer excel
 tipo_caso="grande"
 semilla=100 #semilla de instancia
